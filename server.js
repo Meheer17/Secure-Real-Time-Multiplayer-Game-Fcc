@@ -12,6 +12,12 @@ const runner = require('./test-runner.js');
 const app = express();
 app.use(helmet({noSniff: true, noCache: true, xssFilter: true, hidePoweredBy: true, frameguard: {action: 'deny'}, contentSecurityPolicy: {directives: {defaultSrc: ["'self'"], scriptSrc: ["'self'", "'unsafe-inline'", 'trusted-cdn.com']}}}));
 
+function customHeader(req, res, next) {
+  res.setHeader("X-Powered-By", "PHP 7.4.3")
+  next()
+}
+app.use(customHeader)
+
 app.use('/public', express.static(process.cwd() + '/public'));
 app.use('/assets', express.static(process.cwd() + '/assets'));
 
